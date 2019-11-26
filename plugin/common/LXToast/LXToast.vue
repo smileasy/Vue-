@@ -1,36 +1,37 @@
-<template v-if='showing'>
-	<view class="box">
+<template>
+	<view class="box" v-if="showing">
 		<view class="content">{{ message }}</view>
 	</view>
 </template>
 
 <script>
-import events from './events';
 export default {
 	name: 'LXToast',
 	data() {
 		return {
 			message: '',
-			showing: false 
+			showing: false,
+			options: {}
 		};
 	},
 	created() {
-		console.log(this.showing)
-		events.$on('close', val => {
-			this.showing = false
-		});
-		events.$on('show', val => {
-			console.log('show',val)
-			this.showing = true
-			this.message = val.content
-			setTimeout(() => {
-				console.log('-------')
-				this.showing = false
-			}, val.timeOut)
-		});
+		console.log('this.options')
+		console.log(this.options)
+		
 	},
 	methods: {
-
+		show(param = null) {
+			if (this.showing === true) {
+				return;
+			}
+			console.log(this.options)
+			this.showing = true;
+			this.message = (param && param.content) || '操作成功！';
+			const timeOut = (param && param.timeOut) || 1000;
+			setTimeout(() => {
+				this.showing = false;
+			}, timeOut);
+		}
 	}
 };
 </script>
@@ -47,5 +48,4 @@ export default {
 		color: #ffffff;
 	}
 }
-
 </style>
